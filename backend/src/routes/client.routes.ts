@@ -1,9 +1,12 @@
 import { Router } from 'express';
+import * as clientController from '../controllers/client.controller';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Client routes working!' });
-});
+router.get('/', clientController.getAll);
+router.get('/:id', clientController.getById);
+router.post('/', clientController.create);
+router.put('/:id', clientController.update);
+router.delete('/:id', clientController.remove);
 
 export default router;

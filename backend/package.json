@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-  "build": "tsc",
-  "start": "node dist/index.js",
-  "prisma": "prisma",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma": "prisma",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "ts-node --project tsconfig.json src/config/seed.ts"
   },
   "keywords": [],
   "author": "",
