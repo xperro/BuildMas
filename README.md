@@ -39,7 +39,7 @@ Clone this repo
 You can run the project using bash run.sh
 
 
-##  Running the project with Docker Compose
+##  If run.sh Fails
 
 Alternative run project instrucctions
 

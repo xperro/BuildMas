@@ -1,106 +1,206 @@
 {
   "info": {
-    "name": "BuildMas - Client API",
+    "name": "BuildMas - API",
     "_postman_id": "e7dbac25-1c9e-4e62-b7f4-22cb23278d95",
-    "description": "Postman collection for managing Client endpoints in BuildMas backend",
+    "description": "Postman collection for BuildMas backend",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Get All Clients",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3001/api/clients",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3001",
-          "path": ["api", "clients"]
-        }
-      }
-    },
-    {
-      "name": "Get Client by ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3001/api/clients/:id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3001",
-          "path": ["api", "clients", ":id"]
-        }
-      }
-    },
-    {
-      "name": "Create New Client",
-      "request": {
-        "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Acme Corp\",\n  \"userId\": \"user-1234\"\n}"
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Get All Clients",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3001/api/clients",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "clients"]
+            }
+          }
         },
-        "url": {
-          "raw": "http://localhost:3001/api/clients",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3001",
-          "path": ["api", "clients"]
-        }
-      }
-    },
-    {
-      "name": "Update Client (PUT)",
-      "request": {
-        "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Acme Corp Updated\"\n}"
+        {
+          "name": "Get Client by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3001/api/clients/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "clients", ":id"]
+            }
+          }
         },
-        "url": {
-          "raw": "http://localhost:3001/api/clients/:id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3001",
-          "path": ["api", "clients", ":id"]
-        }
-      }
-    },
-    {
-      "name": "Partial Update Client (PATCH)",
-      "request": {
-        "method": "PATCH",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Partial Update Name\"\n}"
+        {
+          "name": "Create New Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corp\",\n  \"userId\": \"user-1234\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/api/clients",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "clients"]
+            }
+          }
         },
-        "url": {
-          "raw": "http://localhost:3001/api/clients/:id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3001",
-          "path": ["api", "clients", ":id"]
+        {
+          "name": "Update Client (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corp Updated\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/api/clients/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "clients", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Partial Update Client (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Partial Update Name\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/api/clients/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "clients", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Delete Client",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3001/api/clients/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "clients", ":id"]
+            }
+          }
         }
-      }
+      ]
     },
     {
-      "name": "Delete Client",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3001/api/clients/:id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3001",
-          "path": ["api", "clients", ":id"]
+      "name": "Estimates",
+      "item": [
+        {
+          "name": "Get All Estimates",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3001/api/estimates",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "estimates"]
+            }
+          }
+        },
+        {
+          "name": "Get Estimate by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3001/api/estimates/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "estimates", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Create New Estimate",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Paint Living Room\",\n  \"description\": \"White paint on walls\",\n  \"laborCost\": 500,\n  \"clientId\": \"client-id-here\",\n  \"status\": \"initiated\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/api/estimates",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "estimates"]
+            }
+          }
+        },
+        {
+          "name": "Update Estimate (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Paint Room + Ceiling\",\n  \"laborCost\": 600\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/api/estimates/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "estimates", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Partial Update Estimate (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Only title updated\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/api/estimates/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "estimates", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Delete Estimate",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3001/api/estimates/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "estimates", ":id"]
+            }
+          }
         }
-      }
+      ]
     }
   ]
 }
