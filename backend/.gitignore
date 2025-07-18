@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Prisma generated client
+prisma/dev.db
+prisma/migrations/
+
+# Env
+.env
+
+# Logs
+*.log
