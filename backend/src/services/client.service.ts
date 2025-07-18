@@ -25,3 +25,13 @@ export const updateClient = async (id: string, name: string): Promise<Client> =>
 export const deleteClient = async (id: string): Promise<Client> => {
   return prisma.client.delete({ where: { id } });
 };
+
+export const partialUpdateClient = async (
+  id: string,
+  data: Partial<Pick<Client, 'name' | 'userId'>>
+): Promise<Client> => {
+  return prisma.client.update({
+    where: { id },
+    data
+  });
+};

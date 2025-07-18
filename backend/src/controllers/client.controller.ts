@@ -32,3 +32,16 @@ export const remove = async (req: Request, res: Response) => {
   await clientService.deleteClient(req.params.id);
   res.status(204).send();
 };
+
+export const partialUpdate = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const data = req.body;
+console.log('PATCH hit:', req.params.id, req.body);
+
+  try {
+    const updated = await clientService.partialUpdateClient(id, data);
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating client' });
+  }
+};

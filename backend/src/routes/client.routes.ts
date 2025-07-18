@@ -8,5 +8,6 @@ router.get('/:id', clientController.getById);
 router.post('/', clientController.create);
 router.put('/:id', clientController.update);
 router.delete('/:id', clientController.remove);
+router.patch('/:id', clientController.partialUpdate); 
 
 export default router;
