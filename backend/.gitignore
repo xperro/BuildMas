@@ -13,3 +13,5 @@ prisma/migrations/
 
 # Logs
 *.log
+
+/src/generated/prisma
