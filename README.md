@@ -2,6 +2,15 @@
 
 A full-stack web application to manage construction estimates and clients.
 
+##  Running the project Automatically (BASH RUN.SH INCLUDED IN ROOT SOURCE).
+-----------------------------------------------
+
+Demo Instructions
+Required DOCKER
+Clone this repo
+
+You can run the project using bash run.sh (required docker installed before run)
+
 ## Tech Stack
 
 - **Frontend**: React + TypeScript + Material UI
@@ -29,14 +38,6 @@ BuildMas/
 ├── docker-compose.yml
 └── README.md
 
-
-##  Running the project Automatically.
------------------------------------------------
-
-Demo Instructions (for evaluator)
-Clone this repo
-
-You can run the project using bash run.sh
 
 
 ##  If run.sh Fails
