@@ -1,0 +1,48 @@
+.appbar {
+  background-color: #000000 !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.app-title {
+  font-weight: bold;
+  color: white;
+  font-size: 1.25rem;
+}
+
+.nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.nav-button {
+  color: white;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.nav-button.active {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
