@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y postgresql-client
 
 COPY . .
 
-RUN npm run build
+RUN npx prisma generate && npm run build
 
 EXPOSE 3001
 
