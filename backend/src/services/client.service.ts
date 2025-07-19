@@ -30,6 +30,7 @@ export const partialUpdateClient = async (
   id: string,
   data: Partial<Pick<Client, 'name' | 'userId'>>
 ): Promise<Client> => {
+  
   return prisma.client.update({
     where: { id },
     data

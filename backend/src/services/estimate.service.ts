@@ -6,7 +6,7 @@ type EstimateInput = {
   description: string;
   laborCost: number;
   clientId: string;
-  materialsTotal?: number; // opcional, viene del frontend
+  materialsTotal?: number;
 };
 
 export const getAllEstimates = async (): Promise<Estimate[]> => {
