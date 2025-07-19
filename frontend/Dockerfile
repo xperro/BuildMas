@@ -3,7 +3,7 @@ FROM node:20
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --include=dev
+RUN npm install --include=dev && npm install -g vite
 
 COPY . .
 

@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y postgresql-client
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE 3001
 
 CMD ["sh", "config.sh"]
