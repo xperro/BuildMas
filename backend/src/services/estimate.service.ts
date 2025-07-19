@@ -9,35 +9,42 @@ type EstimateInput = {
   materialsTotal?: number;
 };
 
-export const getAllEstimates = async (): Promise<Estimate[]> => {
-  return prisma.estimate.findMany();
+export const getAllEstimates = async () => {
+  return prisma.estimate.findMany({
+    include: {
+      client: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
 };
 
 export const getEstimateById = async (id: string): Promise<Estimate | null> => {
   return prisma.estimate.findUnique({ where: { id } });
 };
 
-export const createEstimate = async (data: EstimateInput): Promise<Estimate> => {
-  const { laborCost, clientId, description, title } = data;
-
-  const materialsTotal = data.materialsTotal || 0;
-  const totalCost = laborCost + materialsTotal;
-
-  let status: 'initiated' | 'in progress' = 'initiated';
-  if (laborCost > 0 && materialsTotal > 0 && clientId) {
-    status = 'in progress';
-  }
-
+export const createEstimate = async (data: {
+  title: string;
+  description: string;
+  laborCost: number;
+  materialsTotal: number;
+  totalCost: number;
+  status: string;
+  clientId: string;
+}) => {
   return prisma.estimate.create({
     data: {
-      laborCost,
-      clientId,
-      description,
-      title,
-      materialsTotal,
-      totalCost,
-      status
-    }
+      title: data.title,
+      description: data.description,
+      laborCost: data.laborCost,
+      materialsTotal: data.materialsTotal,
+      totalCost: data.totalCost,
+      status: data.status,
+      clientId: data.clientId,
+    },
   });
 };
 

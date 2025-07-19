@@ -1,9 +1,16 @@
 import { prisma } from '../config/prisma';
 import { Client } from '@prisma/client';
 
-export const getAllClients = async (): Promise<Client[]> => {
-  return prisma.client.findMany();
+export const getAllClients = async () => {
+  return prisma.client.findMany({
+    include: {
+      estimates: {
+        select: { id: true },
+      },
+    },
+  });
 };
+
 
 export const getClientById = async (id: string): Promise<Client | null> => {
   return prisma.client.findUnique({ where: { id } });
