@@ -10,4 +10,5 @@ echo "Setting permissions for config.sh..."
 chmod +x backend/config.sh
 
 echo "Building and starting containers (no-cache)..."
-sudo docker-compose build --no-cache && sudo docker-compose up
+sudo docker-compose build --no-cache
+sudo docker-compose up -d
