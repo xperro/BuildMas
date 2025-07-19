@@ -9,4 +9,4 @@ sudo docker rmi buildmas_backend || true
 sudo chmod +x backend/config.sh
 
 echo "Starting"
-sudo docker-compose up --build
+sudo docker-compose up --build --no-cache
