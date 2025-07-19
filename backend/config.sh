@@ -1,15 +1,15 @@
-echo "Deploying PostgREST"
-RETRIES=20
-until pg_isready -h postgres -p 5432 -U user || [ $RETRIES -eq 0 ]; do
-  echo "Waiting for connection... ($RETRIES)"
-  RETRIES=$((RETRIES - 1))
-  sleep 2
+echo "Waiting for PostgreSQL to be ready..."
+until pg_isready -h postgres -p 5432 -U user > /dev/null 2>&1; do
+  sleep 1
 done
 
-echo "Running Prisma Migrations"
+echo "PostgreSQL is ready."
+
+echo "Running Prisma migrations..."
 npx prisma migrate deploy
 
-echo "Seeding initial user"
+echo "Running seed script..."
 npx ts-node src/config/seed.ts
-echo "Starting backend..."
+
+echo "Starting backend server..."
 npm run dev
