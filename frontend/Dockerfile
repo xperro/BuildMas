@@ -3,10 +3,10 @@ FROM node:20
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install --include=dev
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npx", "vite", "--host", "--port", "3000"]
+CMD ["npm", "run", "dev", "--", "--host", "--port", "3000"]
