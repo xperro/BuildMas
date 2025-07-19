@@ -46,3 +46,7 @@ export const updateEstimate = async (
   const res = await api.put(`/estimates/${id}`, data);
   return res.data;
 };
+
+export const deleteEstimate = async (id: string): Promise<void> => {
+  await api.delete(`/estimates/${id}`);
+};

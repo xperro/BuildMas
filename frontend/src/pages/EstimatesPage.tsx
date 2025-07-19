@@ -16,6 +16,7 @@ import {
   createEstimate,
   updateEstimate,
   type Estimate,
+  deleteEstimate,
 } from "../services/estimates";
 import { fetchClients, type Client } from "../services/clients";
 
@@ -45,6 +46,11 @@ const EstimatesPage = () => {
   const [estimateToComplete, setEstimateToComplete] = useState<Estimate | null>(
     null
   );
+  const [estimateToDelete, setEstimateToDelete] = useState<Estimate | null>(
+    null
+  );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   useEffect(() => {
     fetchEstimates()
       .then(setEstimates)
@@ -59,6 +65,19 @@ const EstimatesPage = () => {
       setModalOpen(true);
     }
   }, [defaultClientId]);
+
+  const handleDelete = async () => {
+    if (!estimateToDelete) return;
+    try {
+      await deleteEstimate(estimateToDelete.id);
+      setEstimates((prev) => prev.filter((e) => e.id !== estimateToDelete.id));
+      setDeleteDialogOpen(false);
+      setEstimateToDelete(null);
+    } catch (err) {
+      alert("Error deleting estimate");
+      console.error(err);
+    }
+  };
 
   const handleCreate = async (data: {
     title: string;
@@ -231,6 +250,18 @@ const EstimatesPage = () => {
               Set Completed
             </Button>
           )}
+
+          <Button
+            size="small"
+            color="error"
+            variant="outlined"
+            onClick={() => {
+              setEstimateToDelete(row);
+              setDeleteDialogOpen(true);
+            }}
+          >
+            Delete
+          </Button>
         </Box>
       ),
     },
@@ -316,6 +347,27 @@ const EstimatesPage = () => {
             variant="contained"
           >
             Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Delete Estimate</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete estimate{" "}
+            <strong>{estimateToDelete?.title}</strong>? This action is
+            irreversible.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color="error" variant="contained">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import "./styles/layout.style.css";
+import { Outlet } from "react-router-dom";
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
@@ -33,7 +34,6 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
           </Typography>
           <Box className="nav-buttons">
             {navLinks.map((link) => {
-              console.log("Rendering link:", link);
               return (
                 <Button
                   key={link.path}
@@ -52,7 +52,9 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
       </AppBar>
 
       <Container maxWidth="lg">
-        <Box mt={4}>{children}</Box>
+        <Box mt={4}>
+          <Outlet />
+        </Box>
       </Container>
     </>
   );

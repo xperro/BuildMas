@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,22 +7,44 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import type { Client } from "../services/clients";
 import "./styles/usermodal.style.css";
 
 type Props = {
   open: boolean;
   onClose: () => void;
   onCreate: (name: string) => void;
+  onUpdate?: (name: string) => void;
+  editing?: Client | null;
 };
 
-const UserModal: React.FC<Props> = ({ open, onClose, onCreate }) => {
+const UserModal: React.FC<Props> = ({
+  open,
+  onClose,
+  onCreate,
+  onUpdate,
+  editing,
+}) => {
   const [name, setName] = useState("");
 
-  const handleSubmit = () => {
-    if (name.trim()) {
-      onCreate(name.trim());
+  useEffect(() => {
+    if (editing) {
+      setName(editing.name);
+    } else {
       setName("");
     }
+  }, [editing]);
+
+  const handleSubmit = () => {
+    if (!name.trim()) return;
+
+    if (editing && onUpdate) {
+      onUpdate(name.trim());
+    } else {
+      onCreate(name.trim());
+    }
+
+    setName("");
   };
 
   return (
@@ -33,7 +55,7 @@ const UserModal: React.FC<Props> = ({ open, onClose, onCreate }) => {
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle>Create New Client</DialogTitle>
+      <DialogTitle>{editing ? "Edit Client" : "Create New Client"}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -50,7 +72,7 @@ const UserModal: React.FC<Props> = ({ open, onClose, onCreate }) => {
           Cancel
         </Button>
         <Button onClick={handleSubmit} color="primary" variant="contained">
-          Create
+          {editing ? "Update" : "Create"}
         </Button>
       </DialogActions>
     </Dialog>

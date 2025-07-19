@@ -124,6 +124,7 @@ const EstimateModal: React.FC<Props> = ({
   const totalCost = parseFloat(laborCost || "0") + materialsTotal;
 
   const isValid = (): boolean => {
+    const parsedLabor = parseFloat(laborCost);
     if (
       !title.trim() ||
       !description.trim() ||
@@ -134,15 +135,32 @@ const EstimateModal: React.FC<Props> = ({
       return false;
     }
 
+    if (isNaN(parsedLabor) || parsedLabor <= 0) {
+      setError("Labor cost must be greater than zero.");
+      return false;
+    }
+
     const hasValidMaterial = materials.some(
       (m) => m.name.trim() !== "" && m.quantity > 0 && m.unitPrice > 0
     );
 
     if (!hasValidMaterial) {
       setError(
-        "At least one material with name, quantity > 0 and unit price > 0 is required."
+        "Each material must have a name, quantity > 0 and unit price > 0."
       );
       return false;
+    }
+
+    for (const material of materials) {
+      if (
+        material.name.trim() !== "" &&
+        (material.quantity <= 0 || material.unitPrice <= 0)
+      ) {
+        setError(
+          `Material "${material.name}" must have quantity and unit price greater than zero.`
+        );
+        return false;
+      }
     }
 
     setError(null);
@@ -232,6 +250,13 @@ const EstimateModal: React.FC<Props> = ({
           type="number"
           fullWidth
           margin="dense"
+          slotProps={{
+            input: {
+              inputProps: {
+                min: 1,
+              },
+            },
+          }}
         />
 
         <Materials

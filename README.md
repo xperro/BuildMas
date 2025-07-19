@@ -34,6 +34,10 @@ This will:
 
 ---
 
+### Credentials
+User: "admin@buildmas.pro";
+Password: "admin";
+
 ## Tech Stack
 
 | Layer      | Tech                                                                 |

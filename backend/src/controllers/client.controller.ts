@@ -36,7 +36,6 @@ export const remove = async (req: Request, res: Response) => {
 export const partialUpdate = async (req: Request, res: Response) => {
   const { id } = req.params;
   const data = req.body;
-console.log('PATCH hit:', req.params.id, req.body);
 
   try {
     const updated = await clientService.partialUpdateClient(id, data);

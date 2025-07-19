@@ -52,6 +52,13 @@ const Materials: React.FC<Props> = ({
               onChange={(e) => onUpdate(index, "quantity", e.target.value)}
               margin="dense"
               className="material-number"
+              slotProps={{
+                input: {
+                  inputProps: {
+                    min: 1,
+                  },
+                },
+              }}
             />
 
             <TextField
@@ -61,6 +68,13 @@ const Materials: React.FC<Props> = ({
               onChange={(e) => onUpdate(index, "unitPrice", e.target.value)}
               margin="dense"
               className="material-number"
+              slotProps={{
+                input: {
+                  inputProps: {
+                    min: 1,
+                  },
+                },
+              }}
             />
 
             <Typography className="material-total">
