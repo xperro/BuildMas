@@ -1,0 +1,12 @@
+.new-estimate-button {
+  background-color: #fbc02d !important;
+  color: #000 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 2px dashed #000 !important;
+  box-shadow: none;
+}
+
+.new-estimate-button:hover {
+  background-color: #fdd835 !important;
+}

@@ -12,7 +12,7 @@ export const fetchClients = async (): Promise<Client[]> => {
   return res.data;
 };
 
-export const fetchEstimates = async (): Promise<Estimate[]> => {
-  const res = await api.get<Estimate[]>('/estimates');
+export const createClient = async (data: { name: string; userId: string }): Promise<Client> => {
+  const res = await api.post<Client>('/clients', data);
   return res.data;
 };

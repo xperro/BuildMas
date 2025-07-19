@@ -1,0 +1,57 @@
+.construction-dialog .MuiPaper-root {
+  border: 3px dashed #fbc02d;
+  background-color: #212121;
+  color: #fff;
+}
+
+.construction-dialog .MuiDialogTitle-root {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #fdd835;
+  text-align: center;
+  border-bottom: 2px solid #fbc02d;
+}
+
+.construction-dialog .MuiDialogContent-root {
+  padding-top: 16px;
+}
+
+.construction-dialog .MuiTextField-root input,
+.construction-dialog .MuiInputBase-root {
+  background-color: #424242;
+  color: #fff;
+}
+
+.construction-dialog .MuiInputLabel-root {
+  color: #fbc02d !important;
+}
+
+.construction-dialog .MuiInputBase-root.Mui-focused fieldset {
+  border-color: #fbc02d !important;
+}
+
+.construction-dialog .Mui-focused .MuiInputLabel-root {
+  color: #fbc02d !important;
+}
+
+.construction-dialog .MuiButton-containedPrimary {
+  background-color: #fbc02d;
+  color: #000;
+  font-weight: bold;
+}
+
+.construction-dialog .MuiButton-containedPrimary:hover {
+  background-color: #fdd835;
+}
+
+.construction-dialog .MuiButton-textSecondary {
+  color: #fbc02d;
+}
+
+.construction-dialog .MuiButton-textSecondary:hover {
+  background-color: rgba(251, 192, 45, 0.1);
+}
+
+.row-modal {
+    margin-top: 20px;
+}

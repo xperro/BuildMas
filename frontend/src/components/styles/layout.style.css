@@ -3,6 +3,7 @@
   width: 100%;
   margin: 0;
   padding: 0;
+  border-bottom: 5px solid #ffcc00; /* Borde tipo construcción */
 }
 
 html, body {

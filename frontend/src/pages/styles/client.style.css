@@ -1,0 +1,27 @@
+.new-client-button {
+  background-color: #fbc02d !important;  
+  color: #000 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 2px dashed #000 !important;   
+  box-shadow: none;
+}
+
+.new-client-button:hover {
+  background-color: #fdd835 !important;
+}
+
+.action-estimate-button {
+  background-color: #fbc02d;
+  color: #000;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  box-shadow: none;
+  padding: 6px 16px;
+  transition: background-color 0.3s ease;
+}
+
+.action-estimate-button:hover {
+  background-color: #fff176;
+}
