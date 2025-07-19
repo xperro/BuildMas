@@ -27,7 +27,7 @@ services:
       - ./backend:/app
       - /app/node_modules
     working_dir: /app
-    command: sh config.sh
+    command: npm start
 
   frontend:
     build: ./frontend

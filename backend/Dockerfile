@@ -9,6 +9,6 @@ RUN apt-get update && apt-get install -y postgresql-client
 
 COPY . .
 
-ENTRYPOINT ["sh", "config.sh"]
-
 EXPOSE 3001
+
+CMD ["sh", "config.sh"]
