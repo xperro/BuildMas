@@ -12,3 +12,13 @@ chmod +x backend/config.sh
 echo "Building and starting containers (no-cache)..."
 sudo docker-compose build --no-cache
 sudo docker-compose up -d
+
+
+echo ""
+echo "¡BuildMas READY!"
+echo ""
+echo "🔗 Frontend: http://localhost:3000"
+echo "🔗 Backend (API): http://localhost:3001/"
+echo ""
+echo "YOU CAN USE THE SYSTEM NOW"
+echo ""
