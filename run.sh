@@ -10,4 +10,4 @@ echo "Making config.sh executable..."
 sudo chmod +x backend/config.sh
 
 echo "Starting containers..."
-sudo docker-compose up --build --no-cache
+sudo docker compose up --build --no-cache
