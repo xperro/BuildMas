@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -9,10 +9,11 @@ import {
   MenuItem,
   Box,
   Typography,
-} from '@mui/material';
-import type { Client } from '../services/clients';
-import Materials, { type Material } from './Materials';
-import './styles/estimatemodal.style.css';
+} from "@mui/material";
+import type { Client } from "../services/clients";
+import Materials, { type Material } from "./Materials";
+import type { Estimate } from "../services/estimates";
+import "./styles/estimatemodal.style.css";
 
 type Props = {
   open: boolean;
@@ -28,37 +29,86 @@ type Props = {
   }) => Promise<{ id: string }>;
   clients: Client[];
   defaultClientId?: string;
+  editing?: Estimate | null;
+  onUpdate?: (
+    id: string,
+    data: {
+      title: string;
+      description: string;
+      laborCost: number;
+      clientId: string;
+      materials: Material[];
+      materialsTotal: number;
+      totalCost: number;
+    }
+  ) => Promise<void>;
 };
 
 const EstimateModal: React.FC<Props> = ({
   open,
   onClose,
   onCreate,
+  onUpdate,
   clients,
   defaultClientId,
+  editing,
 }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [laborCost, setLaborCost] = useState('');
-  const [clientId, setClientId] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [laborCost, setLaborCost] = useState("");
+  const [clientId, setClientId] = useState("");
   const [materials, setMaterials] = useState<Material[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (defaultClientId) setClientId(defaultClientId);
-  }, [defaultClientId]);
+    if (!open) {
+      setError(null);
+      return;
+    }
+
+    if (editing) {
+      setTitle(editing.title);
+      setDescription(editing.description);
+      setLaborCost(editing.laborCost.toString());
+      setClientId(editing.clientId);
+
+      const raw = localStorage.getItem("estimate-materials");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed[editing.id]) {
+          setMaterials(parsed[editing.id]);
+        } else {
+          setMaterials([]);
+        }
+      } else {
+        setMaterials([]);
+      }
+    } else {
+      setTitle("");
+      setDescription("");
+      setLaborCost("");
+      setClientId(defaultClientId ?? "");
+      setMaterials([]);
+    }
+
+    setError(null);
+  }, [editing, defaultClientId, open]);
 
   const handleAddMaterial = () => {
-    setMaterials([...materials, { name: '', quantity: 0, unitPrice: 0 }]);
+    setMaterials([...materials, { name: "", quantity: 0, unitPrice: 0 }]);
   };
 
   const handleRemoveMaterial = (index: number) => {
     setMaterials(materials.filter((_, i) => i !== index));
   };
 
-  const handleUpdateMaterial = (index: number, field: keyof Material, value: string) => {
+  const handleUpdateMaterial = (
+    index: number,
+    field: keyof Material,
+    value: string
+  ) => {
     const updated = [...materials];
-    if (field === 'quantity' || field === 'unitPrice') {
+    if (field === "quantity" || field === "unitPrice") {
       updated[index][field] = parseFloat(value) || 0;
     } else {
       updated[index][field] = value;
@@ -71,20 +121,27 @@ const EstimateModal: React.FC<Props> = ({
     0
   );
 
-  const totalCost = parseFloat(laborCost || '0') + materialsTotal;
+  const totalCost = parseFloat(laborCost || "0") + materialsTotal;
 
   const isValid = (): boolean => {
-    if (!title.trim() || !description.trim() || !clientId || !laborCost.trim()) {
-      setError('All fields are required.');
+    if (
+      !title.trim() ||
+      !description.trim() ||
+      !clientId ||
+      !laborCost.trim()
+    ) {
+      setError("All fields are required.");
       return false;
     }
 
     const hasValidMaterial = materials.some(
-      (m) => m.name.trim() !== '' && m.quantity > 0 && m.unitPrice > 0
+      (m) => m.name.trim() !== "" && m.quantity > 0 && m.unitPrice > 0
     );
 
     if (!hasValidMaterial) {
-      setError('At least one material with name, quantity > 0 and unit price > 0 is required.');
+      setError(
+        "At least one material with name, quantity > 0 and unit price > 0 is required."
+      );
       return false;
     }
 
@@ -95,36 +152,50 @@ const EstimateModal: React.FC<Props> = ({
   const handleSubmit = async () => {
     if (!isValid()) return;
 
+    const payload = {
+      title: title.trim(),
+      description: description.trim(),
+      laborCost: parseFloat(laborCost),
+      clientId,
+      materials,
+      materialsTotal,
+      totalCost,
+    };
+
     try {
-      const estimate = await onCreate({
-        title: title.trim(),
-        description: description.trim(),
-        laborCost: parseFloat(laborCost),
-        clientId,
-        materials,
-        materialsTotal,
-        totalCost,
-      });
+      if (editing && onUpdate) {
+        await onUpdate(editing.id, payload);
 
-      const raw = localStorage.getItem('estimate-materials');
-      const existing = raw ? JSON.parse(raw) : {};
-      existing[estimate.id] = materials;
-      localStorage.setItem('estimate-materials', JSON.stringify(existing));
+        const raw = localStorage.getItem("estimate-materials");
+        const existing = raw ? JSON.parse(raw) : {};
+        existing[editing.id] = materials;
+        localStorage.setItem("estimate-materials", JSON.stringify(existing));
+      } else {
+        const estimate = await onCreate(payload);
+        const raw = localStorage.getItem("estimate-materials");
+        const existing = raw ? JSON.parse(raw) : {};
+        existing[estimate.id] = materials;
+        localStorage.setItem("estimate-materials", JSON.stringify(existing));
+      }
 
-      setTitle('');
-      setDescription('');
-      setLaborCost('');
-      setClientId('');
-      setMaterials([]);
+      onClose();
     } catch (err) {
-      setError('Error creating estimate.');
+      setError("Error saving estimate.");
       console.error(err);
     }
   };
 
   return (
-    <Dialog open={open} onClose={onClose} className="construction-dialog" fullWidth maxWidth="sm">
-      <DialogTitle>Create New Estimate</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      className="construction-dialog"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle>
+        {editing ? "Edit Estimate" : "Create New Estimate"}
+      </DialogTitle>
       <DialogContent className="row-modal">
         <TextField
           select
@@ -185,8 +256,12 @@ const EstimateModal: React.FC<Props> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">Cancel</Button>
-        <Button onClick={handleSubmit} color="primary" variant="contained">Create</Button>
+        <Button onClick={onClose} color="secondary">
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit} color="primary" variant="contained">
+          {editing ? "Save Changes" : "Create"}
+        </Button>
       </DialogActions>
     </Dialog>
   );

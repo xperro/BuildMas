@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import {
@@ -31,7 +40,11 @@ const EstimatesPage = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const defaultClientId = query.get("clientId") ?? undefined;
-
+  const [editingEstimate, setEditingEstimate] = useState<Estimate | null>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [estimateToComplete, setEstimateToComplete] = useState<Estimate | null>(
+    null
+  );
   useEffect(() => {
     fetchEstimates()
       .then(setEstimates)
@@ -48,45 +61,90 @@ const EstimatesPage = () => {
   }, [defaultClientId]);
 
   const handleCreate = async (data: {
-  title: string;
-  description: string;
-  laborCost: number;
-  clientId: string;
-  materials: Material[];
-  materialsTotal: number;
-  totalCost: number;
-}): Promise<{ id: string }> => {
-  try {
-    const newEstimate = await createEstimate(data);
-    const client = clients.find((c) => c.id === newEstimate.clientId);
+    title: string;
+    description: string;
+    laborCost: number;
+    clientId: string;
+    materials: Material[];
+    materialsTotal: number;
+    totalCost: number;
+  }): Promise<{ id: string }> => {
+    try {
+      const newEstimate = await createEstimate(data);
+      const client = clients.find((c) => c.id === newEstimate.clientId);
 
-    setEstimates((prev) => [
-      ...prev,
-      {
-        ...newEstimate,
-        client: client!,
-      } as Estimate,
-    ]);
+      setEstimates((prev) => [
+        ...prev,
+        {
+          ...newEstimate,
+          client: client!,
+        } as Estimate,
+      ]);
 
-    const stored = localStorage.getItem("estimate-materials");
-    const allMaterials = stored ? JSON.parse(stored) : {};
-    allMaterials[newEstimate.id] = data.materials;
-    localStorage.setItem("estimate-materials", JSON.stringify(allMaterials));
+      const stored = localStorage.getItem("estimate-materials");
+      const allMaterials = stored ? JSON.parse(stored) : {};
+      allMaterials[newEstimate.id] = data.materials;
+      localStorage.setItem("estimate-materials", JSON.stringify(allMaterials));
 
-    setModalOpen(false);
-    navigate("/estimates");
+      setModalOpen(false);
+      navigate("/estimates");
 
-    return { id: newEstimate.id };
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-};
+      return { id: newEstimate.id };
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const handleUpdate = async (
+    id: string,
+    data: {
+      title: string;
+      description: string;
+      laborCost: number;
+      clientId: string;
+      materials: Material[];
+      materialsTotal: number;
+      totalCost: number;
+    }
+  ): Promise<void> => {
+    try {
+      const updated = await updateEstimate(id, data);
+
+      setEstimates((prev) =>
+        prev.map((e) =>
+          e.id === id
+            ? {
+                ...e,
+                ...updated,
+                client: clients.find((c) => c.id === updated.clientId)!,
+              }
+            : e
+        )
+      );
+
+      setModalOpen(false);
+      setEditingEstimate(null);
+      navigate("/estimates");
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
 
   const handleStatusUpdate = async (
     id: string,
     newStatus: "in progress" | "completed"
   ) => {
+    if (newStatus === "completed") {
+      const estimate = estimates.find((e) => e.id === id);
+      if (estimate) {
+        setEstimateToComplete(estimate);
+        setConfirmDialogOpen(true);
+      }
+      return;
+    }
+
     try {
       const updated = await updateEstimate(id, { status: newStatus });
       setEstimates((prev) =>
@@ -143,7 +201,10 @@ const EstimatesPage = () => {
             <Button
               size="small"
               variant="outlined"
-              onClick={() => navigate(`/estimates/${row.id}`)}
+              onClick={() => {
+                setEditingEstimate(row);
+                setModalOpen(true);
+              }}
             >
               Edit
             </Button>
@@ -204,12 +265,60 @@ const EstimatesPage = () => {
         open={modalOpen}
         onClose={() => {
           setModalOpen(false);
+          setEditingEstimate(null);
           navigate("/estimates");
         }}
         onCreate={handleCreate}
+        onUpdate={handleUpdate}
         clients={clients}
         defaultClientId={defaultClientId}
+        editing={editingEstimate}
       />
+      <Dialog
+        open={confirmDialogOpen}
+        onClose={() => setConfirmDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Completion</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to mark the estimate{" "}
+            <strong>{estimateToComplete?.title}</strong> as{" "}
+            <strong>completed</strong>? This action cannot be undone or modified
+            later.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDialogOpen(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
+              if (!estimateToComplete) return;
+              try {
+                const updated = await updateEstimate(estimateToComplete.id, {
+                  status: "completed",
+                });
+                setEstimates((prev) =>
+                  prev.map((e) =>
+                    e.id === estimateToComplete.id
+                      ? { ...e, status: updated.status }
+                      : e
+                  )
+                );
+                setConfirmDialogOpen(false);
+                setEstimateToComplete(null);
+              } catch (err) {
+                alert("Error updating status");
+                console.error(err);
+              }
+            }}
+            color="warning"
+            variant="contained"
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
